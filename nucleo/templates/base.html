@@ -1,0 +1,36 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simple MOOC - Uma simples plataforma de ensino a distância" />
+    <title>Alto do Urubu</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+</head>
+<body>
+    <div class="header">
+        <div class="custom-menu-wrapper">
+          <div class="pure-menu pure-menu-horizontal pure-menu-scrollable custom-menu custom-menu-bottom custom-menu-tucked" id="tuckedMenu">
+              <div class="custom-menu-screen"></div>
+              <ul class="pure-menu-list">
+                  <li class="pure-menu-item"><a href="{% url 'home' %}" class="pure-menu-link">Início</a></li>
+                  <li class="pure-menu-item"><a href="{% url 'afericao' %}" class="pure-menu-link">Aferição</a></li>
+                  <li class="pure-menu-item"><a href="{% url 'historico' %}" class="pure-menu-link">Histórico</a></li>
+                  <li class="pure-menu-item"><a href="/admin" class="pure-menu-link">Admin</a></li>
+                  <!--<li class="pure-menu-item"><a href="#" class="pure-menu-link">Remédios</a></li>
+                  <li class="pure-menu-item"><a href="#" class="pure-menu-link">Alergia</a></li>-->
+              </ul>
+          </div>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+        <div class="footer">
+            Simple MOOC - Uma simples plataforma de ensino a distância
+        </div>
+    </div>
+</div>
+<script src="http://yui.yahooapis.com/3.12.0/build/yui/yui-min.js"></script>
+</body>
+</html>

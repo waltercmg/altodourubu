@@ -1,0 +1,26 @@
+python manage.py runserve
+
+# para sincronizar modelo
+python maange.py makemigrations
+python maange.py migrate
+
+# iniciar nova app
+python manage.py startapp nomeapp
+
+# abrir shell python django
+python manage.py shell
+
+# acessar o banco
+sqlite3
+.open db.sqlite3
+.tables
+
+# criar superuser
+python manage.py createsuperuser
+
+# usuario: altodourubu
+# email: waltercmg@gmail.com
+# senha: alto12345
+
+# se der unicode error, melhor trocar a versão do python para a 3
+# para trocar no cloud9, basta clicar no icone "cloud9" -> preferences -> python support

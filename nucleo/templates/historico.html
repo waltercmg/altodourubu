@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+div.limitado {
+  max-width:500px;
+  margin: auto;
+  border: 3px solid #b3cccc;
+}
+</style>
+<script src="https://www.chartjs.org/dist/2.8.0/Chart.min.js"></script>
+<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+
+<script>
+{% for sinal, datas_valores in sinais.items %}
+		var config{{ forloop.counter }} = {
+			type: 'line',
+			data: {
+				labels: {{ datas_valores.datas|safe }},
+				datasets: [{
+					label: '{{ sinal }}',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: {{ datas_valores.valores|safe }} ,
+					fill: false,
+				}, 
+				]
+			},
+			options: {
+				responsive: true,
+				aspectRatio: 1,
+				title: {
+					display: true,
+					text: '{{ sinal }} - {{ paciente }}'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Data/hora'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						},
+						ticks: {
+                            stepSize: 1
+                        }
+					}]
+				}
+			}
+		};
+{% endfor %}
+
+
+{% if sinais_pa %}
+	var config_pa = {
+			type: 'bar',
+			data: {
+				labels: {{ sinais_pa.PA.datas|safe }},
+				datasets: [{
+					label: 'Pressão Sistólica',
+					backgroundColor: window.chartColors.blue,
+					borderColor: window.chartColors.blue,
+					data: {{ sinais_pa.PA.valores_pamax|safe }} ,
+					fill: false,
+				}, 
+				{
+					label: 'Pressão Disatólica',
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: {{ sinais_pa.PA.valores_pamin|safe }} ,
+					fill: false,
+				},
+				]
+			},
+			options: {
+				responsive: true,
+				aspectRatio: 1,
+				title: {
+					display: true,
+					text: 'Pressão Arterial - {{ paciente }}'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Data/hora'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						},
+					}]
+				}
+			}
+		};
+{% endif %}
+
+
+	window.onload = function() {
+		{% for sinal, datas_valores in sinais.items %}
+			var ctx{{ forloop.counter }} = document.getElementById('canvas{{ forloop.counter }}').getContext('2d');
+			window.myLine = new Chart(ctx{{ forloop.counter }}, config{{ forloop.counter }});
+		{% endfor %}
+		{% if sinais_pa %}
+			var ctx_pa = document.getElementById('canvas_pa').getContext('2d');
+			window.myLine = new Chart(ctx_pa, config_pa);
+		{% endif %}
+	   };
+		
+	</script>
+    <div class="pure-u-1">
+                <h1>Histórico</h1>
+    </div>
+    <form class="pure-form pure" method="get">
+	    {% csrf_token %}
+	    <fieldset>
+	        {% for field in form %}
+	        <div class="pure-group">
+	            {{ field.label }}
+	            {{ field }}
+	            {{ field.errors }}
+	        </div>
+	        {% endfor %}
+	    </fieldset>
+	</form>
+    {% for sinal, datas_valores in sinais.items %}
+            <div class="limitado">
+                <canvas id="canvas{{ forloop.counter }}"></canvas>
+            </div><br>
+   	{% endfor %}
+   	{% if sinais_pa %}
+   			<div class="limitado">
+                <canvas id="canvas_pa"></canvas>
+            </div>
+   	{% endif %}
+{% endblock %}
